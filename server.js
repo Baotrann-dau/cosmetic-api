@@ -17,10 +17,16 @@ app.use(express.json());  // parse JSON từ request body
 const testDbRoute = require('./src/routes/testDbRoute');
 const userRoutes = require('./src/routes/userRoutes');
 const productRoutes = require('./src/routes/productRoutes');
+const categoryRoutes = require('./src/routes/categoryRoutes');
+const orderRoutes = require('./src/routes/orderRoutes');
+const orderItemsRoutes = require('./src/routes/orderItemsRoutes');
 
 app.use('/test-db', testDbRoute); 
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/order-items', orderItemsRoutes);
 
 // Route test để kiểm tra server
 app.get('/', (req, res) => {
