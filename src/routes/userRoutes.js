@@ -10,6 +10,7 @@ router.post('/login', userCtrl.login);
 
 
 console.log('userRoutes loaded');
+  
 
 
 module.exports = router;

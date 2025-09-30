@@ -23,14 +23,14 @@ exports.getById = async (req,res)=>{
 };
 
 exports.create = async (req, res) => {
-  const { name, price, description } = req.body;
+  const { name, price, description, sku, slug, category_id } = req.body;
   if (!name || !price) return res.status(400).json({ error: 'Thiếu thông tin sản phẩm' });
   try {
     const [result] = await db.query(
-      'INSERT INTO products (name, price, description) VALUES (?,?,?)',
-      [name, price, description || null]
+      'INSERT INTO products (name, price, description, sku, slug, category_id) VALUES (?,?,?,?,?,?)',
+      [name, price, description, sku, slug, category_id || null]
     );
-    res.json({ id: result.insertId, name, price, description });
+    res.json({ id: result.insertId, name, price, description, sku, slug, category_id });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Database insert error' });
