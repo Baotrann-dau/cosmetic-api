@@ -75,4 +75,36 @@ exports.login = async (req,res)=>{
   }
 };
 
+exports.getMe = async (req, res) => {
+  try {
+    const { userID, accessToken } = req.body;
+
+    // ✅ Kiểm tra có userID không
+    if (!userID || !accessToken) {
+      return res.status(400).json({ message: "Thiếu userID hoặc accessToken" });
+    }
+
+  
+    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+    if (decoded.id !== userID) {
+      return res.status(403).json({ message: "Token không hợp lệ" });
+    }
+
+    // ✅ Lấy thông tin người dùng
+    const [user] = await db.query("SELECT * FROM users WHERE id = ?", [userID]);
+
+    if (!user || user.length === 0) {
+      return res.status(404).json({ message: "Không tìm thấy người dùng" });
+    }
+
+    // ✅ Ẩn mật khẩu trước khi trả về
+    delete user.password;
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Lỗi server", error: error.message });
+  }
+};
+
 
