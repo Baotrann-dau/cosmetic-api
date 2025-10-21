@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const bcrypt = require('bcryptjs');
 // bcrypt.hash('230203', 10).then(console.log);
+// bcrypt.hash('000000', 10).then(console.log);
 const jwt = require('jsonwebtoken');
 
 exports.getAllUsers = async (req, res) => {
@@ -77,29 +78,21 @@ exports.login = async (req,res)=>{
 
 exports.getMe = async (req, res) => {
   try {
-    const { userID, accessToken } = req.body;
-
-    // ✅ Kiểm tra có userID không
-    if (!userID || !accessToken) {
-      return res.status(400).json({ message: "Thiếu userID hoặc accessToken" });
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ message: "Thiếu token" });
     }
 
-  
-    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
-    if (decoded.id !== userID) {
-      return res.status(403).json({ message: "Token không hợp lệ" });
-    }
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // ✅ Lấy thông tin người dùng
-    const [user] = await db.query("SELECT * FROM users WHERE id = ?", [userID]);
-
-    if (!user || user.length === 0) {
+    const [rows] = await db.query("SELECT * FROM users WHERE id = ?", [decoded.id]);
+    if (!rows || rows.length === 0) {
       return res.status(404).json({ message: "Không tìm thấy người dùng" });
     }
 
-    // ✅ Ẩn mật khẩu trước khi trả về
+    const user = rows[0];
     delete user.password;
-
     res.status(200).json(user);
   } catch (error) {
     console.error(error);
