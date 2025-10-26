@@ -5,6 +5,7 @@ const categoryCtrl = require('../controllers/categoryController');
 
 
 router.get('/', categoryCtrl.getAll);
+router.get('/:id', categoryCtrl.getCategory)
 router.post('/',  categoryCtrl.create);     
 
 

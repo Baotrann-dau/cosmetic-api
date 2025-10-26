@@ -16,17 +16,31 @@ app.use(express.json());  // parse JSON từ request body
 // Test route
 const testDbRoute = require('./src/routes/testDbRoute');
 const userRoutes = require('./src/routes/userRoutes');
+const authRoutes = require('./src/routes/authRoutes');
 const productRoutes = require('./src/routes/productRoutes');
 const categoryRoutes = require('./src/routes/categoryRoutes');
 const orderRoutes = require('./src/routes/orderRoutes');
 const orderItemsRoutes = require('./src/routes/orderItemsRoutes');
+const cartRoutes = require('./src/routes/cartRoutes');
+const cartItemRoutes = require('./src/routes/cartItemRoutes');
+const locationRoutes = require('./src/routes/locationRoutes');
+const couponRoutes = require('./src/routes/couponRoutes');
+const paymentRoutes = require('./src/routes/paymentRoutes');
+
 
 app.use('/test-db', testDbRoute); 
 app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/order-items', orderItemsRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/cart-item', cartItemRoutes);
+app.use('/api/location', locationRoutes);
+app.use('/api/coupon', couponRoutes);
+app.use('/api/payment', paymentRoutes);
+
 
 // Route test để kiểm tra server
 app.get('/', (req, res) => {
